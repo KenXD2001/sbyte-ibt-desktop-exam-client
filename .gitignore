@@ -1,0 +1,26 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+
+# Tauri / Rust
+apps/*/src-tauri/target/
+apps/*/src-tauri/gen/
+**/*.rs.bk
+Cargo.lock
+target/
+
+# Vite
+*.log
+
+# Local env (per-deployment URLs/secrets) — commit only .env.example
+.env
+!.env.example
+
+# Build caches
+.turbo/
+*.tsbuildinfo
+
+# Windows
+Thumbs.db
+ehthumbs.db
