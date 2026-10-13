@@ -79,6 +79,16 @@ function handleKeyDown(e: KeyboardEvent) {
     return;
   }
 
+  if (key === "escape") {
+    // Esc must never reach the page during kiosk: the browser drops HTML
+    // fullscreen on it (shrunk exam inside the locked window). The Rust LL
+    // hook already swallows it on desktop — this covers the web path.
+    if (DEBUG) console.log("[Kiosk] Blocked Escape");
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+
   if (key === "f12") {
     if (ALLOW_DEVTOOLS) return; // DEV: DevTools hatch
     if (DEBUG) console.log("[Kiosk] Blocked F12");

@@ -20,9 +20,11 @@ Current honest state (v0.1):
   layers; focus loss is emitted as a `security-violation`.
 - **Key lockdown** (`lockdown.rs`), driven 1:1 by `kiosk_enter`/`kiosk_exit`:
   - **Windows**: `WH_KEYBOARD_LL` hook swallows the Win key, any key while
-    Win is held, and Alt+Tab / Alt+Esc / Alt+F4 / Alt+Space (via
-    `WM_SYSKEY*`), Ctrl+Tab, Ctrl+Esc, Ctrl+Shift+Esc, plus a best-effort
-    Ctrl+Alt+Del swallow (the OS reserves that chord).
+    Win is held, plain Esc (the browser would drop HTML fullscreen on it,
+    shrinking the exam inside the locked window), and Alt+Tab / Alt+Esc /
+    Alt+F4 / Alt+Space (via `WM_SYSKEY*`), Ctrl+Tab, Ctrl+Esc,
+    Ctrl+Shift+Esc, plus a best-effort Ctrl+Alt+Del swallow (the OS reserves
+    that chord).
   - **Ubuntu/GNOME**: `gsettings` disables the Alt+Tab/Super/workspace/
     terminal/screenshot keybindings (previous values saved and restored on
     `kiosk_exit`); verified by the `gsettings_roundtrip` test.

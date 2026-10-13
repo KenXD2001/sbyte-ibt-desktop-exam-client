@@ -230,9 +230,11 @@ mod platform {
             // Ctrl+Tab / Ctrl+Alt+Tab (Alt+Tab itself is swallowed above via
             // SYSKEYDOWN, no modifier polling involved).
             v if v == VK_TAB as u32 => alt || ctrl,
-            // Alt+Esc (cycle), Ctrl+Esc (Start fallback),
-            // Ctrl+Shift+Esc (Task Manager).
-            v if v == VK_ESCAPE as u32 => alt || ctrl,
+            // Esc — ALWAYS swallowed while kiosk is active, even bare. The
+            // browser drops HTML fullscreen on a plain Esc, which shrank the
+            // exam content inside the still-locked window (small page + black
+            // corners). Covers Alt+Esc / Ctrl+Esc / Ctrl+Shift+Esc too.
+            v if v == VK_ESCAPE as u32 => true,
             // Alt+F4 (close is also refused by kiosk.rs) and Alt+Space
             // (window system menu: move/size/minimize/close).
             v if v == VK_F4 as u32 => alt,
@@ -278,7 +280,7 @@ mod platform {
                 eprintln!("[lockdown] SetWindowsHookExW failed — Win/Alt+Tab NOT blocked");
                 return;
             }
-            eprintln!("[lockdown] keyboard hook installed — Win/Alt+Tab/Alt+F4 blocked while kiosk active");
+            eprintln!("[lockdown] keyboard hook installed — Win/Alt+Tab/Alt+F4/Esc blocked while kiosk active");
             let mut msg = std::mem::zeroed::<MSG>();
             while GetMessageW(&mut msg, std::ptr::null_mut(), 0, 0) > 0 {
                 TranslateMessage(&msg);
